@@ -1,4 +1,6 @@
 <?php
+include('./config/db.php');
+
 // Read the variables sent via POST from our API
 $sessionId = $_POST["sessionId"];
 $serviceCode = $_POST["serviceCode"];
@@ -27,10 +29,14 @@ if ($text == "") {
             $response .= "END Account number is ABCD1213 \n";
             break;
         case "1*2":
-            $response = "CON Enter Your Account Number";
+            $response = "CON Enter ".explode("*", $text)."Your Account Number";
             break;
-        case "1*2*ABCD1213":
-            $response = "END Welcome back".$phoneNumber;
+        case "1*2".explode("*", $text):
+            if("1*2".explode("*", $text) == 'ABCD1213'){
+                $response = "END ".explode("*", $text)." Welcome back".$phoneNumber;
+            }else{
+                $response = "END ".explode("*", $text). "Not found";
+            }
             break;
         case "2":
             // kinya
